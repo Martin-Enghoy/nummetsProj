@@ -19,8 +19,9 @@ void input(int x, double eq[14][16]){ // PARAMETERS (NUMBER OF EQUATIONS, MATRIX
 	for(int i=0; i<x; i++){ //LOOP TO SAVE MATRICES
 		cout<< "\nEQUATION: ";
 		cout<< i+1;
+		cout<< "\n";
 		for(int j=0; j<x; j++){	
-			cout<< "\nINPUT X";
+			cout<< "INPUT X";
 			cout<< j+1;
 			cout<< ": ";
 			cin>> ans;
@@ -71,17 +72,21 @@ void pivot(double eq[14][16], int num, int step){
 	if(step==1){
 		for(int i=1; i<num-1; i++){
 			check=true;
-			if(abs(eq[0][0]) < abs(eq[i][0])) {
-				if(abs(eq[i][0]) < abs(eq[i+1][0])){
+			if(abs(eq[0][0]) < abs(eq[i][0])) { //COMPARE 1 TO 2
+				if(abs(eq[i][0]) < abs(eq[i+1][0])){ // COMPARE 2 TO 3
 					check=false;
 				}
-				if(abs(eq[0][0]) < abs(eq[i+1][0]) && !check){
-					swap(eq, i+1, step, num);
+				if(abs(eq[0][0]) < abs(eq[i+1][0]) && !check){ //COMPARE 1 TO 3
+					swap(eq, i+1, step, num); //SWAP 1 TO 3
 					break;
 				}
-				swap(eq, i, step, num);
+				swap(eq, i, step, num); //SWAP 1 TO 2
 				break;
 			}
+			else if(abs(eq[0][0]) < abs(eq[i+1][0])){ // COMPARE 1 TO 3
+					swap(eq, i+1, step, num); // SWAP 1 TO 3 
+					break;
+				}
 		}
 	}
 
@@ -102,8 +107,6 @@ void pivot(double eq[14][16], int num, int step){
 void oper(double eq[14][16], double temp[14][16], int step, int num, int i){
 	double x3;
 	x3=temp[0][1];
-	cout<< " ";
-	cout<< step;
 	for(int m=0; m<=num; m++){
 		temp[i][m] = trunc(eq[i][m] * x3);
 		if(m==num){
@@ -121,16 +124,8 @@ void frwrd(double eq[14][16], int num, int step, int itr, int count){
 	for(int i=step-1; i<num-1; i++){
 		for(int j=step-1; j<num; j++){
 			if(eq[i+1][itr]!=0 && itr<num-1 ){
-				cout<< "I: ";
-				cout<< i; 
-				cout<< "\nITR: ";
-				cout<< itr;
 				x1 = eq[i][count];
-				cout<< "\nX1: ";
-				cout<< x1;
 				x2 = eq[itr+1][count];
-				cout<< "\nX2: ";
-				cout<< x2;
 				temp[0][1] = x2/x1; 
 				oper(eq, temp, itr, num, i);
 				disp(eq,num); 
@@ -148,7 +143,7 @@ void backwrd(double eq[14][16], int num){
 	for(int i=num-1; i>=0; i--){
 		x=0.0;
 		for(int j=0; j<num; j++){
-				x+=eq[i][j]*unkwn[j];
+				x+=trunc(eq[i][j]*unkwn[j]);
 		}
 		unkwn[i]=trunc((eq[i][num]-x)/eq[i][i]);
 		cout<< "\nX";

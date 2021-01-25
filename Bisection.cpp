@@ -4,6 +4,8 @@
 #include <math.h>
 
 
+float func(float x, float coeff[], int deg);
+
 int main(){
 	
 	float Xm, Xu=0.00000, Xl=0.00000; // Values
@@ -24,24 +26,24 @@ int main(){
 	for(int i=0; i<degreeEq; i++){
 		if(i==0){
 			printf("What is the coefficient of the constant?\n");
-			scanf("%.5f\n", &arr[i]);
+			scanf("%f", &arr[i]);
 		}
 		else {
 			printf("What is the coefficient of term %i?\n", i);
-			scanf("%.5f\n", &arr[i]);
+			scanf("%f", &arr[i]);
 		}
 	}
 	
 	//Init of Xl and Xu
 	if(Xl == 0 && Xu == 0){
 	printf("What is the initial value of Xl?\n");
-	scanf("%.5f\n", &Xl);
+	scanf("%f", &Xl);
 	outArr[counter] = Xl;
 	counter++;
 	
 	
 	printf("What is the initial value of Xu\n");
-	scanf("%.5f\n", &Xu);
+	scanf("%f", &Xu);
 	outArr[counter] = Xu;
 	counter++;
 	}
@@ -91,3 +93,19 @@ int main(){
 	
 	return 0;
 }	
+
+
+
+float func(float x, float coeff[], int deg){
+	float ftotal=0, tempval=0;
+	for(int i=0; i<=deg; i++){
+		tempval=1;
+		for(int j=i; j<deg; j++){
+			tempval = tempval*x;
+		}
+		ftotal = ftotal + (coeff[i]*tempval);
+	}
+	return ftotal;
+}
+
+
