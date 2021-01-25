@@ -6,11 +6,11 @@
 
 int main(){
 	
-	float Xm, Xu=0, Xl=0; // Values
-	float fXm = 0, fXu = 0, fXl = 0; // Functions
+	float Xm, Xu=0.00000, Xl=0.00000; // Values
+	float fXm = 0.00000, fXu = 0.00000, fXl = 0.00000; // Functions
 	int degreeEq;
-	float arr[20]; // array for coefficients
-	float outArr[200]; // array for table printing
+	double arr[20]; // array for coefficients
+	double outArr[200]; // array for table printing
 	int counter = 0; // For counting the array items
 	int iter = 10; // Stopping Parameter
 	float Ea; //Average Error %
