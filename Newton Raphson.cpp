@@ -17,6 +17,14 @@ float getCoeff(int deg, float coeff[]){
 	return *coeff;
 }
 
+float getDeriv(int deg, float dcoeff[], float fcoeff[]){
+	for(int i=0; i<deg; i++){
+		dcoeff[i] = fcoeff[i]*(deg-i);
+	}
+	
+	return *dcoeff;
+}
+
 float func(float x, float coeff[], int deg){
 	float ftotal=0, tempval=0;
 	for(int i=0; i<=deg; i++){
@@ -30,14 +38,13 @@ float func(float x, float coeff[], int deg){
 }
 
 void out(float x){
-	printf("\n\nRoot = %15.5f", trunc(x*10.0)/10.0);
+	printf("\n\nRoot = %15.5f", trunc(x*100000.0)/100000.0);
 }
 
 int main(){
 	float fcoeff[20], dcoeff[20];
 	int fdeg, ddeg, mIter, iter=0;
 	float x0, fx, fpx, x1, e, se, sfx, sfpx;
-	//deriv (coeff);
 	printf("Newton Raphson Method\n");
 	
 	printf("Degree of the function (20 max): ");
@@ -46,9 +53,7 @@ int main(){
 	printf("\nFunction\n");
 	*fcoeff = getCoeff(fdeg, fcoeff);
 	
-	printf("\nDerivative of the function\n");
-	ddeg = fdeg-1;
-	*dcoeff = getCoeff(ddeg, dcoeff);
+	*dcoeff = getDeriv(fdeg, dcoeff, fcoeff);
 	
 	printf("\nInitial Guess: ");
 	scanf("%f", &x0);

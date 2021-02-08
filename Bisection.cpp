@@ -3,98 +3,114 @@
 #include <string.h>
 #include <math.h>
 
-
+float getCoeff(int deg, float coeff[]);
 float func(float x, float coeff[], int deg);
 
 int main(){
 	
-	float Xm, Xu=0.00000, Xl=0.00000; // Values
-	float fXm = 0.00000, fXu = 0.00000, fXl = 0.00000; // Functions
+	float Xm, Xu, Xl, pXm; // Values
+	float fXm, fXu, fXl; // Functions
 	int degreeEq;
-	double arr[20]; // array for coefficients
-	double outArr[200]; // array for table printing
+	float arr[21]; // array for coefficients
+	float outArr[200]; // array for table printing
 	int counter = 0; // For counting the array items
-	int iter = 10; // Stopping Parameter
+	int iter=0, mIter; // Stopping Parameter
+	float aveErr;
 	float Ea; //Average Error %
 	
 	
-	printf("What is the degree of your equation?\n");
+	printf("-------Bisection Method-------\n");
+	printf("What is the degree of your equation? (Max: 20)\n");
 	scanf("%i", &degreeEq);
 	
+	*arr = getCoeff(degreeEq, arr);
 	
-	// Accepting Coefficients of the equation
-	for(int i=0; i<degreeEq; i++){
-		if(i==0){
-			printf("What is the coefficient of the constant?\n");
-			scanf("%f", &arr[i]);
-		}
-		else {
-			printf("What is the coefficient of term %i?\n", i);
-			scanf("%f", &arr[i]);
-		}
-	}
 	
 	//Init of Xl and Xu
-	if(Xl == 0 && Xu == 0){
 	printf("What is the initial value of Xl?\n");
 	scanf("%f", &Xl);
-	outArr[counter] = Xl;
-	counter++;
+	//outArr[counter] = Xl;
+	//counter++;
 	
 	
 	printf("What is the initial value of Xu\n");
 	scanf("%f", &Xu);
-	outArr[counter] = Xu;
-	counter++;
+	//outArr[counter] = Xu;
+	//counter++;
+	
+	
+	printf("How many iterations before stopping?\n");
+	scanf("%i", &mIter);
+	printf("How much (percent)error can be tolerated?\n");
+	scanf("%f", &aveErr);
+	
+	
+	Xm = (Xu+Xl) / 2.0; // Midpoint (bisecting)
+	
+	fXl = func(Xl, arr, degreeEq);
+		
+	fXu = func(Xu, arr, degreeEq);
+	
+	fXm = func(Xm, arr, degreeEq);
+	
+	printf("\n\nIter #                 Xl                   Xu                   Xm                f(Xl)                f(Xu)                 f(Xm)                 %%|Ea|\n");
+	printf("%6d   %18.5f   %18.5f   %18.5f   %18.5f   %18.5f   %18.5f\n", iter, trunc(Xl*100000.0)/100000.0, trunc(Xu*100000.0)/100000.0, trunc(Xm*100000.0)/100000.0, trunc(fXl*100000.0)/100000.0, trunc(fXu*100000.0)/100000.0, trunc(fXm*100000.0)/100000.0);
+	
+	
+	for(iter=1; iter<=mIter; iter++){
+		pXm = Xm; //Temp storarge for Error
+		
+		if((fXl*fXm) < 0){
+			Xu = Xm;
+		}
+		else if((fXl*fXm) > 0){
+			Xl = Xm;
+		}
+		else if((fXl*fXm) == 0){
+			printf("\nThe root of the equation has been found to be: %15.5f", trunc(Xm*10.0)/10.0);
+		}
+		else {
+			printf("\nInvalid Output....");
+		}
+		
+		Xm = (Xu+Xl) / 2.0; // Midpoint (bisecting)
+		
+		fXl = func(Xl, arr, degreeEq);
+		
+		fXu = func(Xu, arr, degreeEq);
+		
+		fXm = func(Xm, arr, degreeEq);
+		
+		Ea = ((Xm - pXm) / Xm) * 100.0;
+		
+		printf("%6d   %18.5f   %18.5f   %18.5f   %18.5f   %18.5f   %18.5f  %18.5f\n", iter, trunc(Xl*100000.0)/100000.0, trunc(Xu*100000.0)/100000.0, trunc(Xm*100000.0)/100000.0, trunc(fXl*100000.0)/100000.0, trunc(fXu*100000.0)/100000.0, trunc(fXm*100000.0)/100000.0, fabs(trunc(Ea*100000.0)/100000.0)); //Output line for this recursion
+		
+		if(fabs(trunc(Ea*100000.0)/100000.0) <= aveErr){
+			printf("Average Error has been met. Program stops at iteration #%i\n", iter);
+			break;
+		}
 	}
-	
-	Xm = (Xu+Xl)/2; // Midpoint (bisecting)
-	outArr[counter] = Xm;
-	counter++;
-	
-	for(int j=0; j<degreeEq; j++){ // Recursion for value of function Xu
-		fXu = fXu + (arr[j]*pow(Xu,j));
-	}
-	outArr[counter] = fXu;
-	counter++;
-	
-	for(int k=0; k<degreeEq; k++){ // Recursion for value of function Xl
-		fXl = fXl + (arr[k]*pow(Xl,k));
-	}
-	outArr[counter] = fXl;
-	counter++;
-	
-	for(int l=0; l<degreeEq; l++){ // Recursion for value of function Xm
-		fXm = fXm + (arr[l]*pow(Xm,l));
-	}
-	outArr[counter] = fXm;
-	counter++;
-	
-	
-	
-	printf("%.5f   %.5f   %.5f   %.5f   %.5f   %.5f\n", Xl, Xu, Xm, fXl, fXu, fXm); //Output line for this recursion
-	
-	if((fXu*fXm) < 0){
-		Xu = Xm;
-	}
-	else if((fXu*fXm) > 0){
-		Xl = Xm;
-	}
-	else if((fXu*fXm) == 0){
-		printf("\nThe root of the equation has been found to be: %.5f", Xm);
-	}
-	else {
-		printf("\nInvalid Output....");
-	}
-	
-	
-	
 	
 	
 	return 0;
 }	
 
 
+float getCoeff(int deg, float coeff[]){
+	
+	for(int i=0; i<=deg; i++){
+		if(i == deg){
+			printf("Constant term: ");
+			scanf("%f", &coeff[i]);
+		}
+		else{
+			printf("Coefficient of x^%d: ", deg-i);
+			scanf("%f", &coeff[i]);
+		}
+	}
+	
+	return *coeff;
+}
 
 float func(float x, float coeff[], int deg){
 	float ftotal=0, tempval=0;

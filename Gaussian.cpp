@@ -8,11 +8,11 @@ using namespace std;
 
 
 
-double trunc(double x){
-	double temp = 100000.0*x;
-	int truncate = temp;
-	double ans = (truncate+0.0)/100000.0;
-	return ans;
+double trunc(double val){
+	double temp = 100000.0*val;
+	int new_val = temp;
+	double conv = (new_val+0.0)/100000.0;
+	return conv;
 } 
 void input(int x, double eq[14][16]){ // PARAMETERS (NUMBER OF EQUATIONS, MATRIX)
 	double ans;
@@ -39,8 +39,7 @@ void disp(double eq[14][16], int num){
 	for(int i=0; i<num; i++) {
 		cout<<"\n[";
       for(int j=0; j<=num; j++) {
-         cout<< eq[i][j];
-		 cout<< " ";
+         cout<< eq[i][j] << " ";
 		 if(j==2){
 			 cout<< ": ";
 		 }
@@ -146,10 +145,7 @@ void backwrd(double eq[14][16], int num){
 				x+=trunc(eq[i][j]*unkwn[j]);
 		}
 		unkwn[i]=trunc((eq[i][num]-x)/eq[i][i]);
-		cout<< "\nX";
-		cout<< i+1;
-		cout<< ": ";
-		cout<< unkwn[i];
+		cout<< "\nX" << i+1; << ": " << unkwn[i];
 	}
 
 }
